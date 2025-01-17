@@ -1,17 +1,30 @@
 package com.example.hometask.data;
 
-import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 public class Showtime {
 
-    @ManyToOne
+    private Long id;
     private Movie movie;
-
     private String theater;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
+
+    public Showtime(Long id, Movie movie, String theater, LocalDateTime startTime, LocalDateTime endTime) {
+        this.id = id;
+        this.movie = movie;
+        this.theater = theater;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Movie getMovie() {
         return movie;

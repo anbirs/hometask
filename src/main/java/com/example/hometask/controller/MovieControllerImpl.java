@@ -17,7 +17,7 @@ public class MovieControllerImpl implements MovieController {
     }
 
     @PostMapping
-    public ResponseEntity<Movie> addMovie(@RequestBody Movie movie) {
+    public ResponseEntity<Movie> addMovie(Movie movie) {
         return ResponseEntity.ok(movieService.saveMovie(movie));
     }
 
@@ -32,8 +32,8 @@ public class MovieControllerImpl implements MovieController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Movie>> getMovies() {
-        return ResponseEntity.ok(movieService.getAllMovies());
+    public ResponseEntity<List<Movie>> getMovies(String details) {
+        return ResponseEntity.ok(movieService.getAllMovies(details));
     }
 
     @Override

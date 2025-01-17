@@ -22,4 +22,9 @@ public class Ticket {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
+    public Ticket(String seatNumber, BigDecimal price) {
+        this.seatNumber = seatNumber;
+        this.price = price;
+    }
 }

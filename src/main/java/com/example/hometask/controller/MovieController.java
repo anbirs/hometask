@@ -9,7 +9,7 @@ import java.util.List;
 public interface MovieController {
 
     @GetMapping
-    public ResponseEntity<List<Movie>> getMovies();
+    public ResponseEntity<List<Movie>> getMovies(@RequestParam(required = false) String details);
 
     @GetMapping("/{id}")
     public ResponseEntity<Movie> getMovieById(@PathVariable Long id);

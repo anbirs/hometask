@@ -17,6 +17,15 @@ public class MovieEntity {
     private String rating;
     private int releaseYear;
 
+    public MovieEntity(Long id, String title, String genre, int duration, String rating, int releaseYear) {
+        this.id = id;
+        this.title = title;
+        this.genre = genre;
+        this.duration = duration;
+        this.rating = rating;
+        this.releaseYear = releaseYear;
+    }
+
     public Long getId() {
         return id;
     }

@@ -1,4 +1,4 @@
-package com.example.hometask.repository.converter;
+package com.example.hometask.service.converter;
 
 import com.example.hometask.data.Movie;
 import com.example.hometask.repository.entity.MovieEntity;
@@ -21,13 +21,12 @@ public class MovieConverter implements Converter <Movie, MovieEntity>{
 
     @Override
     public MovieEntity toEntity(Movie dto) {
-        MovieEntity entity = new MovieEntity();
-        entity.setId(dto.getId());
-        entity.setTitle(dto.getTitle());
-        entity.setGenre(dto.getGenre());
-        entity.setDuration(dto.getDuration());
-        entity.setRating(dto.getRating());
-        entity.setReleaseYear(dto.getReleaseYear());
-        return entity;
+        return new MovieEntity(
+                dto.getId(),
+                dto.getTitle(),
+                dto.getGenre(),
+                dto.getDuration(),
+                dto.getRating(),
+                dto.getReleaseYear());
     }
 }

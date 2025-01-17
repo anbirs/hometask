@@ -1,16 +1,16 @@
 package com.example.hometask.service;
 
+import ch.qos.logback.core.util.StringUtil;
 import com.example.hometask.data.Movie;
 import com.example.hometask.repository.MovieRepository;
-import com.example.hometask.repository.converter.Converter;
-import com.example.hometask.repository.converter.MovieConverter;
+import com.example.hometask.service.converter.MovieConverter;
 import com.example.hometask.repository.entity.MovieEntity;
+import com.example.hometask.service.mapper.MovieFieldMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,9 +28,26 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public List<Movie> getAllMovies() {
-        return movieRepository.findAll()
-                .stream()
+    public List<Movie> getAllMovies(String details) {
+
+        final List<MovieEntity> response = new ArrayList<>();
+        if (StringUtil.isNullOrEmpty(details)) {
+            response.addAll(movieRepository.findAll());
+        } else {
+            final Set<MovieField> fieldsToFetch = MovieField.parseFields(details);
+            List<Object[]> results = movieRepository.findAllMoviesByDynamicFields(fieldsToFetch);
+
+             for (Object[] row : results) {
+                Map<String, Object> rowMap = new HashMap<>();
+                int index = 0;
+                for (MovieField field : fieldsToFetch) {
+                    rowMap.put(field.getFieldName(), row[index++]);
+                }
+                response.add(MovieFieldMapper.INSTANCE.map(rowMap));
+            }
+        }
+
+        return response.stream()
                 .map(converter::toDto)
                 .collect(Collectors.toList());
     }
