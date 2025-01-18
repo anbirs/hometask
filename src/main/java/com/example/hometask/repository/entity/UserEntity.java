@@ -9,7 +9,7 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String username;
     private String email;
 
     @Enumerated(EnumType.STRING)
@@ -17,8 +17,15 @@ public class UserEntity {
 
     private String password;
 
-    public UserEntity(Long id, String name, String email, String password, String role) {
+    public UserEntity(Long id, String username, String email, String password, String role) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = Role.getByName(role);
+    }
 
+    public UserEntity() {
     }
 
     public Long getId() {
@@ -29,12 +36,12 @@ public class UserEntity {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {

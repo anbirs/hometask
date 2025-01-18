@@ -9,8 +9,16 @@ public class Movie {
     private int releaseYear;
     private Long id;
 
-    public Movie(Long id, String title, String genre, int duration, String rating, int releaseYear) {
+    public Movie(String title, String genre, int duration, String rating, int releaseYear, Long id) {
+        this.title = title;
+        this.genre = genre;
+        this.duration = duration;
+        this.rating = rating;
+        this.releaseYear = releaseYear;
+        this.id = id;
+    }
 
+    public Movie() {
     }
 
     public String getTitle() {

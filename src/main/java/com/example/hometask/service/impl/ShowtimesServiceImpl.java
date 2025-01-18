@@ -1,8 +1,9 @@
-package com.example.hometask.service;
+package com.example.hometask.service.impl;
 
 import com.example.hometask.data.Showtime;
 import com.example.hometask.repository.ShowtimeRepository;
 import com.example.hometask.repository.entity.ShowtimeEntity;
+import com.example.hometask.service.ShowtimesService;
 import com.example.hometask.service.converter.MovieConverter;
 import com.example.hometask.service.converter.ShowtimeConverter;
 import jakarta.persistence.EntityNotFoundException;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,17 +29,19 @@ public class ShowtimesServiceImpl implements ShowtimesService {
     @Override
     public Showtime saveShowtime(Showtime showtime) {
         // find showtimes by theater and  existing start  < current start < existing end   or   existing start  <  current end < existing end
-        validateOverlappingShowtimes(showtime);
-        return showtimeConverter.toDto(showtimeRepository.save(showtimeConverter.toEntity(showtime)));
+        ShowtimeEntity entity = showtimeConverter.toEntity(showtime);
+        validateOverlappingShowtimes(entity);
+        return showtimeConverter.toDto(showtimeRepository.save(entity));
     }
 
-    private void validateOverlappingShowtimes(Showtime showtime) {
+    private void validateOverlappingShowtimes(ShowtimeEntity showtime) {
         List<ShowtimeEntity> existingShowtimes = showtimeRepository.findByTheater(showtime.getTheater());
 
         LocalDateTime startTime = showtime.getStartTime();
         LocalDateTime endTime = showtime.getEndTime();
 
-        List<ShowtimeEntity> overlappingShowtimes = existingShowtimes.stream().filter(existingShowtime -> startTime.isBefore(existingShowtime.getEndTime()) && endTime.isAfter(existingShowtime.getStartTime())
+        List<ShowtimeEntity> overlappingShowtimes = existingShowtimes.stream().filter(existingShowtime -> !Objects.equals(existingShowtime.getId(), showtime.getId()))
+                .filter(existingShowtime -> startTime.isBefore(existingShowtime.getEndTime()) && endTime.isAfter(existingShowtime.getStartTime())
         ).toList();
 
         if (!overlappingShowtimes.isEmpty()) {
@@ -65,8 +68,8 @@ public class ShowtimesServiceImpl implements ShowtimesService {
     }
 
     @Override
-    public Optional<Showtime> getShowtimeById(Long id) {
-        return Optional.empty();
+    public Showtime getShowtimeById(Long id) {
+        return showtimeConverter.toDto(showtimeRepository.findById(id).orElseThrow());
     }
 
     @Override
@@ -75,11 +78,12 @@ public class ShowtimesServiceImpl implements ShowtimesService {
         ShowtimeEntity existingShowtime = showtimeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Showtime not found with ID: " + id));
 
-        validateOverlappingShowtimes(updatedShowtime);
+        validateOverlappingShowtimes(existingShowtime);
 
 
         existingShowtime.setMovie(movieConverter.toEntity(updatedShowtime.getMovie()));
         existingShowtime.setTheater(updatedShowtime.getTheater());
+        existingShowtime.setMaxSeats(updatedShowtime.getMaxSeats());
         existingShowtime.setStartTime(updatedShowtime.getStartTime());
         existingShowtime.setEndTime(updatedShowtime.getEndTime());
 
@@ -87,7 +91,11 @@ public class ShowtimesServiceImpl implements ShowtimesService {
     }
 
     @Override
-    public void deleteShowtime(Long id) {
-
+    public Long deleteShowtime(Long id) {
+        if (!showtimeRepository.existsById(id)) {
+            throw new EntityNotFoundException("Showtime not found: " + id);
+        }
+        showtimeRepository.deleteById(id);
+        return id;
     }
 }

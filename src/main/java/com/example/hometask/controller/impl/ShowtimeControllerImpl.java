@@ -1,5 +1,6 @@
-package com.example.hometask.controller;
+package com.example.hometask.controller.impl;
 
+import com.example.hometask.controller.ShowtimeController;
 import com.example.hometask.data.Showtime;
 import com.example.hometask.service.ShowtimesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,21 +26,21 @@ public class ShowtimeControllerImpl implements ShowtimeController {
 
     @Override
     public ResponseEntity<Showtime> getShowtimeById(Long id) {
-        return null;
+        return ResponseEntity.ok(showtimesService.getShowtimeById(id));
     }
 
     @Override
     public ResponseEntity<Showtime> addShowtime(Showtime showtime) {
-        return null;
+        return ResponseEntity.ok(showtimesService.saveShowtime(showtime));
     }
 
     @Override
     public ResponseEntity<Showtime> updateShowtime(Long id, Showtime updatedShowtime) {
-        return null;
+        return ResponseEntity.ok(showtimesService.updateShowtime(id, updatedShowtime));
     }
 
     @Override
-    public ResponseEntity<Void> deleteShowtime(Long id) {
-        return null;
+    public ResponseEntity<Long> deleteShowtime(Long id) {
+        return ResponseEntity.ok(showtimesService.deleteShowtime(id));
     }
 }

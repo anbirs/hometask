@@ -26,6 +26,9 @@ public class MovieEntity {
         this.releaseYear = releaseYear;
     }
 
+    public MovieEntity() {
+    }
+
     public Long getId() {
         return id;
     }

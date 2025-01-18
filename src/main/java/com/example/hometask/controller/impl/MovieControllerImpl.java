@@ -1,5 +1,6 @@
-package com.example.hometask.controller;
+package com.example.hometask.controller.impl;
 
+import com.example.hometask.controller.MovieController;
 import com.example.hometask.data.Movie;
 import com.example.hometask.service.MovieService;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +24,12 @@ public class MovieControllerImpl implements MovieController {
 
     @Override
     public ResponseEntity<Movie> updateMovie(Long id, Movie updatedMovie) {
-        return null;
+        return ResponseEntity.ok(movieService.updateMovie(id, updatedMovie));
     }
 
     @Override
-    public ResponseEntity<Void> deleteMovie(Long id) {
-        return null;
+    public ResponseEntity<Long> deleteMovie(Long id) {
+        return ResponseEntity.ok(movieService.deleteMovie(id));
     }
 
     @GetMapping
@@ -38,6 +39,6 @@ public class MovieControllerImpl implements MovieController {
 
     @Override
     public ResponseEntity<Movie> getMovieById(Long id) {
-        return null;
+        return ResponseEntity.ok(movieService.getMovieById(id));
     }
 }

@@ -1,8 +1,10 @@
-package com.example.hometask.service;
+package com.example.hometask.service.impl;
 
 import ch.qos.logback.core.util.StringUtil;
 import com.example.hometask.data.Movie;
 import com.example.hometask.repository.MovieRepository;
+import com.example.hometask.service.MovieField;
+import com.example.hometask.service.MovieService;
 import com.example.hometask.service.converter.MovieConverter;
 import com.example.hometask.repository.entity.MovieEntity;
 import com.example.hometask.service.mapper.MovieFieldMapper;
@@ -18,13 +20,13 @@ public class MovieServiceImpl implements MovieService {
     @Autowired
     private MovieRepository movieRepository;
     @Autowired
-    private MovieConverter converter;
+    private MovieConverter movieConverter;
 
 
     @Override
     public Movie saveMovie(Movie movie) {
-        MovieEntity entity = converter.toEntity(movie);
-        return converter.toDto(movieRepository.save(entity));
+        MovieEntity entity = movieConverter.toEntity(movie);
+        return movieConverter.toDto(movieRepository.save(entity));
     }
 
     @Override
@@ -48,13 +50,13 @@ public class MovieServiceImpl implements MovieService {
         }
 
         return response.stream()
-                .map(converter::toDto)
+                .map(movieConverter::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<Movie> getMovieById(Long id) {
-        return movieRepository.findById(id).map(converter::toDto);
+    public Movie getMovieById(Long id) {
+        return movieRepository.findById(id).map(movieConverter::toDto).orElseThrow();
     }
 
     @Override
@@ -66,15 +68,16 @@ public class MovieServiceImpl implements MovieService {
             existingEntity.setRating(updatedMovie.getRating());
             existingEntity.setReleaseYear(updatedMovie.getReleaseYear());
             MovieEntity savedEntity = movieRepository.save(existingEntity);
-            return converter.toDto(savedEntity);
+            return movieConverter.toDto(savedEntity);
         }).orElseThrow(() -> new EntityNotFoundException("Movie not found with ID: " + id));
     }
 
     @Override
-    public void deleteMovie(Long id) {
+    public Long deleteMovie(Long id) {
         if (!movieRepository.existsById(id)) {
             throw new EntityNotFoundException("Movie not found: " + id);
         }
         movieRepository.deleteById(id);
+        return id;
     }
 }

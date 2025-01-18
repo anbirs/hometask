@@ -1,9 +1,9 @@
 package com.example.hometask.repository.entity;
 
-import com.example.hometask.data.Movie;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 public class ShowtimeEntity {
@@ -14,15 +14,40 @@ public class ShowtimeEntity {
     @ManyToOne
     private MovieEntity movie;
 
+    @OneToMany
+    private Set<TicketEntity> tickets;
+
     private String theater;
+    private Integer maxSeats;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    public ShowtimeEntity(Long id, Movie movie, String theater, LocalDateTime startTime, LocalDateTime endTime) {
-
+    public ShowtimeEntity(Long id, MovieEntity movie, String theater, Integer maxSeats, LocalDateTime startTime, LocalDateTime endTime) {
+          this.id = id;
+          this.movie = movie;
+          this.theater = theater;
+        this.maxSeats = maxSeats;
+        this.startTime = startTime;
+          this.endTime = endTime;
     }
 
     public ShowtimeEntity() {
+    }
+
+    public Set<TicketEntity> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(Set<TicketEntity> tickets) {
+        this.tickets = tickets;
+    }
+
+    public Integer getMaxSeats() {
+        return maxSeats;
+    }
+
+    public void setMaxSeats(Integer maxSeats) {
+        this.maxSeats = maxSeats;
     }
 
     public Long getId() {
