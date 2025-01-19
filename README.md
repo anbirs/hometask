@@ -455,7 +455,7 @@
 {
     "username": "Lola",
     "email": "use2@mail.as",
-    "password": "160"
+    "password": "****"
 }
 ```
 
@@ -479,7 +479,7 @@
 {
     "username": "Lola",
     "email": "use2@mail.as",
-    "password": "160"
+    "password": "****"
 }
 ```
 
@@ -547,7 +547,7 @@
 ```json
 {
     "username": "Kiki",
-    "password": "160"
+    "password": "****"
 }
 ```
 
