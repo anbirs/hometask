@@ -8,8 +8,8 @@ import java.util.List;
 
 @Repository
 public interface ShowtimeRepository extends JpaRepository<ShowtimeEntity, Long> {
-    List<ShowtimeEntity> findByMovieIdAndTheater(Long movieId, String theaterName);
+    List<ShowtimeEntity> findByMovieIdAndTheaterIgnoreCase(Long movieId, String theaterName);
     List<ShowtimeEntity> findByMovieId(Long movieId);
-    List<ShowtimeEntity> findByTheater(String theaterName);
+    List<ShowtimeEntity> findByTheaterIgnoreCase(String theaterName);
 }
 

@@ -2,9 +2,10 @@ package com.example.hometask.service.impl;
 
 import com.example.hometask.data.User;
 import com.example.hometask.repository.UserRepository;
+import com.example.hometask.repository.entity.Role;
 import com.example.hometask.repository.entity.UserEntity;
 import com.example.hometask.service.UserService;
-import com.example.hometask.service.converter.UserConverter;
+import com.example.hometask.service.mapper.UserMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,23 +19,19 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private UserConverter userConverter;
+    private UserMapper userMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public User registerUser(User user) {
-        UserEntity userEntity = userConverter.toEntity(user);
+    public User registerUser(User user, Role role) {
+        UserEntity userEntity = userMapper.toEntity(user);
         if (userRepository.findByUsername(userEntity.getUsername()).isPresent()) {
             throw new IllegalArgumentException("username already registered");
         }
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
-        return userConverter.toDto(userRepository.save(userEntity));
-    }
-
-    @Override
-    public User findUserByUsername(String username) {
-        return userConverter.toDto(userRepository.findByUsername(username).orElseThrow());
+        userEntity.setRole(role);
+        return userMapper.toDto(userRepository.save(userEntity));
     }
 
     @Override
@@ -49,7 +46,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll().stream()
-                .map(userConverter::toDto)
+                .map(userMapper::toDto)
                 .collect(Collectors.toList());
     }
 }

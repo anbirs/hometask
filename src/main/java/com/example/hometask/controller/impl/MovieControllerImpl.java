@@ -1,44 +1,42 @@
 package com.example.hometask.controller.impl;
 
 import com.example.hometask.controller.MovieController;
+import com.example.hometask.data.ApiResponse;
 import com.example.hometask.data.Movie;
 import com.example.hometask.service.MovieService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/movies")
 public class MovieControllerImpl implements MovieController {
-    private final MovieService movieService;
-
-    public MovieControllerImpl(MovieService movieService) {
-        this.movieService = movieService;
-    }
+    @Autowired
+    private MovieService movieService;
 
     @PostMapping
-    public ResponseEntity<Movie> addMovie(Movie movie) {
-        return ResponseEntity.ok(movieService.saveMovie(movie));
+    public ResponseEntity<ApiResponse<Movie>> addMovie(Movie movie) {
+        return ResponseEntity.ok(ApiResponse.success(movieService.saveMovie(movie)));
     }
 
     @Override
-    public ResponseEntity<Movie> updateMovie(Long id, Movie updatedMovie) {
-        return ResponseEntity.ok(movieService.updateMovie(id, updatedMovie));
+    public ResponseEntity<ApiResponse<Movie>> updateMovie(Long id, Movie updatedMovie) {
+        return ResponseEntity.ok(ApiResponse.success(movieService.updateMovie(id, updatedMovie)));
     }
 
     @Override
-    public ResponseEntity<Long> deleteMovie(Long id) {
-        return ResponseEntity.ok(movieService.deleteMovie(id));
+    public ResponseEntity<ApiResponse<Long>> deleteMovie(Long id) {
+        return ResponseEntity.ok(ApiResponse.success(movieService.deleteMovie(id)));
     }
 
     @GetMapping
-    public ResponseEntity<List<Movie>> getMovies(String details) {
-        return ResponseEntity.ok(movieService.getAllMovies(details));
+    public ResponseEntity<ApiResponse<List<Movie>>> getMovies(String details) {
+        return ResponseEntity.ok(ApiResponse.success(movieService.getAllMovies(details)));
     }
 
     @Override
-    public ResponseEntity<Movie> getMovieById(Long id) {
-        return ResponseEntity.ok(movieService.getMovieById(id));
+    public ResponseEntity<ApiResponse<Movie>> getMovieById(Long id) {
+        return ResponseEntity.ok(ApiResponse.success(movieService.getMovieById(id)));
     }
 }

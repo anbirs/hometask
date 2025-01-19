@@ -1,15 +1,16 @@
-package com.example.hometask.service;
+package com.example.hometask.service.mapper;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import lombok.Getter;
 
+import java.util.*;
+
+@Getter
 public enum MovieField {
     TITLE("title"),
     GENRE("genre"),
     DURATION("duration"),
     RATING("rating"),
-    YEAR("year");
+    YEAR("releaseYear");
 
     private final String fieldName;
 
@@ -17,16 +18,12 @@ public enum MovieField {
         this.fieldName = fieldName;
     }
 
-    public String getFieldName() {
-        return fieldName;
-    }
-
-    public static Set<MovieField> parseFields(String input) {
+    public static List<MovieField> parseFields(String input) {
         if (input == null || input.trim().isEmpty()) {
-            return new HashSet<>();
+            return new ArrayList<>();
         }
 
-        Set<MovieField> result = new HashSet<>();
+        List<MovieField> result = new ArrayList<>();
         Arrays.stream(input.split(","))
                 .map(String::trim)
                 .forEach(value -> {

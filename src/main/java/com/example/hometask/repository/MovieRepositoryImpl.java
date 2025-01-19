@@ -1,7 +1,7 @@
 package com.example.hometask.repository;
 
 import com.example.hometask.repository.entity.MovieEntity;
-import com.example.hometask.service.MovieField;
+import com.example.hometask.service.mapper.MovieField;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -11,7 +11,6 @@ import jakarta.persistence.criteria.Selection;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Repository
@@ -21,7 +20,7 @@ public class MovieRepositoryImpl implements MovieCriteriaRepository {
     private EntityManager entityManager;
 
     @Override
-    public List<Object[]> findAllMoviesByDynamicFields(Set<MovieField> fields) {
+    public List<Object[]> findAllMoviesByDynamicFields(List<MovieField> fields) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Object[]> query = cb.createQuery(Object[].class);
         Root<MovieEntity> movie = query.from(MovieEntity.class);

@@ -22,14 +22,14 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
         String roleWithPrefix = user.getRole().name();
 
         return User.builder()
                 .username(user.getUsername())
-                .password(user.getPassword()) // Password must be encoded
-                .authorities(List.of(() -> roleWithPrefix)) // Add role with prefix
+                .password(user.getPassword())
+                .authorities(List.of(() -> roleWithPrefix))
                 .build();
     }
 }

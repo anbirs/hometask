@@ -1,9 +1,8 @@
-package com.example.hometask.repository;
+package com.example.hometask.unit.repository;
 
+import com.example.hometask.repository.ShowtimeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class ShowtimeRepositoryTest {

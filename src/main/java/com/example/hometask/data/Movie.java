@@ -1,71 +1,21 @@
 package com.example.hometask.data;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Movie {
 
     private String title;
     private String genre;
-    private int duration;
+    private Integer duration;
     private String rating;
-    private int releaseYear;
+    private Integer releaseYear;
     private Long id;
 
-    public Movie(String title, String genre, int duration, String rating, int releaseYear, Long id) {
-        this.title = title;
-        this.genre = genre;
-        this.duration = duration;
-        this.rating = rating;
-        this.releaseYear = releaseYear;
-        this.id = id;
-    }
-
-    public Movie() {
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getGenre() {
-        return genre;
-    }
-
-    public void setGenre(String genre) {
-        this.genre = genre;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    public String getRating() {
-        return rating;
-    }
-
-    public void setRating(String rating) {
-        this.rating = rating;
-    }
-
-    public int getReleaseYear() {
-        return releaseYear;
-    }
-
-    public void setReleaseYear(int releaseYear) {
-        this.releaseYear = releaseYear;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }
