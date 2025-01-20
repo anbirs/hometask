@@ -1,8 +1,10 @@
 package com.example.hometask.service.impl;
 
 import com.example.hometask.data.User;
+import com.example.hometask.repository.TicketRepository;
 import com.example.hometask.repository.UserRepository;
 import com.example.hometask.repository.entity.Role;
+import com.example.hometask.repository.entity.TicketEntity;
 import com.example.hometask.repository.entity.UserEntity;
 import com.example.hometask.service.UserService;
 import com.example.hometask.service.mapper.UserMapper;
@@ -10,6 +12,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +21,8 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private TicketRepository ticketRepository;
     @Autowired
     private UserMapper userMapper;
     @Autowired
@@ -35,10 +40,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public Long deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
             throw new EntityNotFoundException("User not found: " + id);
         }
+        // remove related tickets
+        List<TicketEntity> ticketsPerUser = ticketRepository.findByUser_Id(id);
+        ticketsPerUser.forEach(ticketEntity -> ticketRepository.deleteById(ticketEntity.getId()));
         userRepository.deleteById(id);
         return id;
     }

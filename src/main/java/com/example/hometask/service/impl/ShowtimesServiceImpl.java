@@ -2,6 +2,7 @@ package com.example.hometask.service.impl;
 
 import com.example.hometask.data.Showtime;
 import com.example.hometask.repository.ShowtimeRepository;
+import com.example.hometask.repository.TicketRepository;
 import com.example.hometask.repository.entity.ShowtimeEntity;
 import com.example.hometask.service.ShowtimesService;
 import com.example.hometask.service.mapper.ShowtimeMapper;
@@ -18,6 +19,9 @@ public class ShowtimesServiceImpl implements ShowtimesService {
     public static final String SHOWTIME_NOT_FOUND = "Showtime not found: ";
     @Autowired
     private ShowtimeRepository showtimeRepository;
+
+    @Autowired
+    private TicketRepository ticketRepository;
 
     @Autowired
     private ShowtimeMapper showtimeMapper;
@@ -68,9 +72,13 @@ public class ShowtimesServiceImpl implements ShowtimesService {
 
     @Override
     public Long deleteShowtime(Long id) {
+        if (!ticketRepository.findByShowtime_Id(id).isEmpty()) {
+            throw new IllegalArgumentException("Showtime cannot be removed, as it has related tickets");
+        }
         if (!showtimeRepository.existsById(id)) {
             throw new EntityNotFoundException(SHOWTIME_NOT_FOUND + id);
         }
+
         showtimeRepository.deleteById(id);
         return id;
     }

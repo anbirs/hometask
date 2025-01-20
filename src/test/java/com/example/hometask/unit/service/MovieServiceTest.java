@@ -2,6 +2,7 @@ package com.example.hometask.unit.service;
 
 import com.example.hometask.data.Movie;
 import com.example.hometask.repository.MovieRepository;
+import com.example.hometask.repository.ShowtimeRepository;
 import com.example.hometask.repository.entity.MovieEntity;
 import com.example.hometask.service.impl.MovieServiceImpl;
 import com.example.hometask.service.mapper.MovieField;
@@ -23,6 +24,9 @@ class MovieServiceTest {
 
     @Mock
     private MovieRepository movieRepository;
+
+    @Mock
+    private ShowtimeRepository showtimeRepository;
 
     @Mock
     private MovieMapper movieMapper;
@@ -150,6 +154,7 @@ class MovieServiceTest {
         Long result = movieService.deleteMovie(movieId);
         assertEquals(movieId, result);
         verify(movieRepository, times(1)).deleteById(movieId);
+        verify(showtimeRepository, times(1)).cleanMovieReferences(movieId);
     }
 
     @Test

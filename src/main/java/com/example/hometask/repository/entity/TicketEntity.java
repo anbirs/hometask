@@ -18,8 +18,9 @@ public class TicketEntity {
     @ManyToOne
     private ShowtimeEntity showtime;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private UserEntity user;
+
 
     private String seatNumber;
     private BigDecimal price;

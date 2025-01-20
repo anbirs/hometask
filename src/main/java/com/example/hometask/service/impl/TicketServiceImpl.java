@@ -1,17 +1,15 @@
 package com.example.hometask.service.impl;
 
 import com.example.hometask.data.Ticket;
-import com.example.hometask.repository.ShowtimeRepository;
 import com.example.hometask.repository.TicketRepository;
 import com.example.hometask.repository.entity.TicketEntity;
 import com.example.hometask.service.TicketService;
-import com.example.hometask.service.mapper.ShowtimeMapper;
 import com.example.hometask.service.mapper.TicketMapper;
-import com.example.hometask.service.mapper.UserMapper;
 import com.example.hometask.service.validator.TicketValidator;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,13 +20,7 @@ public class TicketServiceImpl implements TicketService {
     @Autowired
     private TicketRepository ticketRepository;
     @Autowired
-    private ShowtimeRepository showtimeRepository;
-    @Autowired
     private TicketMapper ticketMapper;
-    @Autowired
-    private ShowtimeMapper showtimeMapper;
-    @Autowired
-    private UserMapper userMapper;
     @Autowired
     private TicketValidator ticketValidator;
 
@@ -58,10 +50,13 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    @Transactional
     public Long deleteTicket(Long id) {
-        if (!ticketRepository.existsById(id)) {
-            throw new EntityNotFoundException(TICKET_NOT_FOUND + id);
-        }
+        TicketEntity ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(TICKET_NOT_FOUND + id));
+        ticket.setUser(null);
+        ticket.setShowtime(null);
+        ticketRepository.save(ticket);
         ticketRepository.deleteById(id);
         return id;
     }

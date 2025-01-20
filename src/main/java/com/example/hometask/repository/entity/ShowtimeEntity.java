@@ -17,6 +17,7 @@ public class ShowtimeEntity {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "movie_id")
     private MovieEntity movie;
 
     private String theater;

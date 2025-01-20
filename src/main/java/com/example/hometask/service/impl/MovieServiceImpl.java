@@ -3,6 +3,7 @@ package com.example.hometask.service.impl;
 import ch.qos.logback.core.util.StringUtil;
 import com.example.hometask.data.Movie;
 import com.example.hometask.repository.MovieRepository;
+import com.example.hometask.repository.ShowtimeRepository;
 import com.example.hometask.service.mapper.MovieField;
 import com.example.hometask.service.MovieService;
 import com.example.hometask.service.mapper.MovieMapper;
@@ -11,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,6 +22,8 @@ public class MovieServiceImpl implements MovieService {
     public static final String MOVIE_NOT_FOUND = "Movie not found ";
     @Autowired
     private MovieRepository movieRepository;
+    @Autowired
+    private ShowtimeRepository showtimeRepository;
     @Autowired
     private MovieMapper movieMapper;
     @Autowired
@@ -80,10 +84,12 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    @Transactional
     public Long deleteMovie(Long id) {
         if (!movieRepository.existsById(id)) {
             throw new EntityNotFoundException(MOVIE_NOT_FOUND + id);
         }
+        showtimeRepository.cleanMovieReferences(id);
         movieRepository.deleteById(id);
         return id;
     }

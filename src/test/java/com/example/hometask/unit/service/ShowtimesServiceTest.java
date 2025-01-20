@@ -2,6 +2,7 @@ package com.example.hometask.unit.service;
 
 import com.example.hometask.data.Showtime;
 import com.example.hometask.repository.ShowtimeRepository;
+import com.example.hometask.repository.TicketRepository;
 import com.example.hometask.repository.entity.ShowtimeEntity;
 import com.example.hometask.service.impl.ShowtimesServiceImpl;
 import com.example.hometask.service.mapper.ShowtimeMapper;
@@ -23,6 +24,9 @@ class ShowtimesServiceTest {
 
     @Mock
     private ShowtimeRepository showtimeRepository;
+
+    @Mock
+    private TicketRepository ticketRepository;
 
     @Mock
     private ShowtimeMapper showtimeMapper;

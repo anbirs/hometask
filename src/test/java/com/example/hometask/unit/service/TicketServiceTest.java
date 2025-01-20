@@ -124,7 +124,8 @@ class TicketServiceTest {
     @Test
     void deleteTicket() {
         Long ticketId = 1L;
-        when(ticketRepository.existsById(ticketId)).thenReturn(true);
+        TicketEntity ticket = new TicketEntity(ticketId, null, null, null, null);
+        when(ticketRepository.findById(ticketId)).thenReturn(Optional.of(ticket));
         Long result = ticketService.deleteTicket(ticketId);
         assertEquals(ticketId, result);
         verify(ticketRepository, times(1)).deleteById(ticketId);
@@ -135,7 +136,7 @@ class TicketServiceTest {
         Long ticketId = 1L;
         when(ticketRepository.existsById(ticketId)).thenReturn(false);
         assertThrows(EntityNotFoundException.class, () -> ticketService.deleteTicket(ticketId));
-        verify(ticketRepository, times(1)).existsById(ticketId);
+        verify(ticketRepository, times(1)).findById(ticketId);
     }
 
     @Test
